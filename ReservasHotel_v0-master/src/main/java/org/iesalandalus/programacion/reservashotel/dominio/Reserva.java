@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Reserva {
 
-    private final int MAX_NUMERO_MESES_RESERVA=15;
+    private final int MAX_NUMERO_MESES_RESERVA=6;
     private final int MAX_HORAS_POSTERIOR_CHECKOUT=12;
     public final String FORMATO_FECHA_RESERVA="dd/MM/yyyy";
     public final String FORMATO_FECHA_HORA_RESERVA="dd/MM/yyyy hh:mm";
@@ -54,15 +54,15 @@ public class Reserva {
 
     */
     public Reserva(Reserva reserva){
-        setHuesped(reserva.getHuesped);
-        setHabitacion(reserva.getHabitacion);
-        setRegimen(reserva.getRegimen);
-        setFechaInicioReserva(reserva.getFechaInicioReserva);
-        setFechaFinReserva(reserva.getFechaFinReserva);
-        setCheckIn(reserva.getCheckIn);
-        setCheckOut(reserva.getCheckOut);
-        setNumeroPersonas(reserva.getNumeroPersonas);
-        setPrecio(reserva.getPrecio);
+        setHuesped(reserva.getHuesped());
+        setHabitacion(reserva.getHabitacion());
+        setRegimen(reserva.getRegimen());
+        setFechaInicioReserva(reserva.getFechaInicioReserva());
+        setFechaFinReserva(reserva.getFechaFinReserva());
+        setCheckIn(reserva.getCheckIn());
+        setCheckOut(reserva.getCheckOut());
+        setNumeroPersonas(reserva.getNumeroPersonas());
+        setPrecio(reserva.getPrecio());
 
     }
 
@@ -97,30 +97,31 @@ public class Reserva {
         return fechaInicioReserva;
     }
 
+    //VALIDACIONES SOBRE LA FECHA DE INICIO DE LA RESERVA
     public void setFechaInicioReserva(LocalDate fechaInicioReserva) {
         if (fechaInicioReserva==null)
-            throw new NullPointerException("Fecha inicio null");
+            throw new NullPointerException("ERROR: La fecha de inicio de una reserva no puede ser nula.");
 
         if (fechaInicioReserva.isBefore(LocalDate.now()))
-            throw new IllegalArgumentException("fecha no puede ser anterior");
+            throw new IllegalArgumentException("ERROR: La fecha de fin de la reserva debe ser posterior a la de inicio.");
 
         if (fechaInicioReserva.isAfter(LocalDate.now().plusMonths(MAX_NUMERO_MESES_RESERVA)))
-            throw new IllegalArgumentException("La fecha se sale del rango");
+            throw new IllegalArgumentException("ERROR: La fecha de inicio de la reserva no puede ser posterior a seis meses.");
 
 
         this.fechaInicioReserva = fechaInicioReserva;
     }
 
-    public Localdate getFechaFinReserva() {
+    public LocalDate getFechaFinReserva() {
         return fechaFinReserva;
     }
 
-    public void setFechaFinReserva(Localdate fechaFinReserva) {
+    public void setFechaFinReserva(LocalDate fechaFinReserva) {
 
         if (fechaFinReserva==null)
-            throw new NullPointerException("nulofinreserva");
+            throw new NullPointerException("ERROR: La fecha de fin de una reserva no puede ser nula.");
         if (fechaFinReserva.isBefore(fechaInicioReserva))
-            throw new IllegalArgumentException("kaka");
+            throw new IllegalArgumentException("ERROR: La fecha de fin de la reserva debe ser posterior a la de inicio.");
 
         this.fechaFinReserva = fechaFinReserva;
     }
@@ -131,8 +132,10 @@ public class Reserva {
 
     public void setCheckIn(LocalDateTime checkIn) {
         //HACER NULO if null
+        if (checkIn ==null)
+            throw new NullPointerException("ERROR: El checkin de una reserva no puede ser nulo.");
         if (checkIn.isBefore(fechaInicioReserva.atTime(00,01)))
-            throw new IllegalArgumentException("Fail");
+            throw new IllegalArgumentException("ERROR: El checkin de una reserva no puede ser anterior a la fecha de inicio de la reserva.");
         this.checkIn = checkIn;
     }
 
@@ -143,9 +146,9 @@ public class Reserva {
     public void setCheckOut(LocalDateTime checkOut) {
         //COMPROBAR NULOif null
         if (checkOut.isBefore(checkIn))
-            throw new IllegalArgumentException("checkout mal");
+            throw new IllegalArgumentException("ERROR: El checkout de una reserva no puede ser anterior al checkin");
         if (checkOut.isAfter(fechaFinReserva.atStartOfDay().plusHours(MAX_HORAS_POSTERIOR_CHECKOUT)))
-            throw new IllegalArgumentException("Vaya con los tests");
+            throw new IllegalArgumentException("ERROR: El checkout de una reserva puede ser como máximo 12 horas después de la fecha de fin de la reserva.");
 
 
         this.checkOut = checkOut;
@@ -154,7 +157,7 @@ public class Reserva {
     public double getPrecio() {
         return precio;
     }
-
+//ESTÁ BIEN? TODO
     public void setPrecio(double precio) {
         int diasReservados = Period.between(fechaInicioReserva, fechaFinReserva).getDays();
         this.precio = (habitacion.getPrecio() * diasReservados) + (getNumeroPersonas() * regimen.getIncrementoPrecio() * diasReservados);
@@ -166,10 +169,10 @@ public class Reserva {
 
     public void setNumeroPersonas(int numeroPersonas) {
 
-        if (numeroPersonas<0 || numeroPersonas>habitacion.getTipoHabitacion().getNumeroMaximoPersonas())
-            throw new IllegalArgumentException("askjdnaskj");
-        if (numeroPersonas>habitacion.getTipoHabitacion().getNumeroMaximoPersonas())
-            throw new IllegalArgumentException("no pueden entrar más gente que sitio");
+        if (numeroPersonas<0 || numeroPersonas > habitacion.getTipoHabitacion().getNumeroMaximoPersonas())
+            throw new IllegalArgumentException("ERROR: El número de personas de una reserva no puede ser menor o igual a 0");
+        if (numeroPersonas > habitacion.getTipoHabitacion().getNumeroMaximoPersonas())
+            throw new IllegalArgumentException("ERROR: El número de personas de una reserva no puede superar al máximo de personas establacidas para el tipo de habitación reservada.");
 
 
         this.numeroPersonas = numeroPersonas;

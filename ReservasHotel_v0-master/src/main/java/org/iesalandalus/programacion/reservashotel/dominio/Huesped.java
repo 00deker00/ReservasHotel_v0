@@ -53,6 +53,7 @@ public class Huesped {
         return nombreFormateado.trim();
     }
     private Boolean comprobarLetraDni(String dni){
+    private Boolean comprobarLetraDni(String dni){
         if (dni == null)
             throw new NullPointerException("ERROR: El dni de un huésped no puede ser nulo.");
         if (dni.isBlank())

@@ -1,7 +1,8 @@
-package org.iesalandalus.programacion.reservashotel.negocio;
+package org.iesalandalus.programacion.reservashotel.dominio;
 
-import org.iesalandalus.programacion.reservashotel.dominio.Huesped;
-public class Huespedes {/*
+import javax.naming.OperationNotSupportedException;
+
+public class Huespedes {
     private Huesped[] coleccionHuespedes;
     private int capacidad;
     private int tamano;
@@ -66,7 +67,7 @@ public class Huespedes {/*
 
     public Huesped buscar(Huesped huesped){
         if (huesped == null)
-            throw new NullPointerException("no pued ser nulllllllllo!!!!");
+            throw new NullPointerException("No puede ser nulo el buscar uno que no existe");
 
         int busqueda = buscarIndice(huesped);
 
@@ -78,10 +79,10 @@ public class Huespedes {/*
 
     public void borrar(Huesped huesped)throws OperationNotSupportedException{
         if (huesped==null)
-            throw new NullPointerException("huesped nulo borrar");
+            throw new NullPointerException("Borrar el borrar el huesped nulo");
         if (buscar(huesped) == null)
-            throw new IllegalArgumentException("el huesped no está en el array");
-
+            throw new IllegalArgumentException("El huesped no está en el array de antes");
+//ALGORITMO PARA DESPLAZAR Y BORRAR
         int indiceBorrado = buscarIndice(huesped);
         coleccionHuespedes[indiceBorrado] = null;
         desplazarUnaPosicionHaciaIzquierda(indiceBorrado);
@@ -106,5 +107,5 @@ public class Huespedes {/*
         return tamano;
     }
 
-*/
+
 }
