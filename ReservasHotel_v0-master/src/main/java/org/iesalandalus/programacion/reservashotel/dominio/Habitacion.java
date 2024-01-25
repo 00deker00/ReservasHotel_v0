@@ -6,7 +6,7 @@ public class Habitacion {
 
     // ATRIBUTOS
     //CONCEPTOS:
-    //final == constanteeeee
+    //final == constanteeeeeee
     public static final double MIN_PRECIO_HABITACION = 40;
     public static final double MAX_PRECIO_HABITACION = 150;
     public static final int MIN_NUMERO_PUERTA = 0;
